@@ -9,5 +9,5 @@
 *.pyc
 *.log
 __pycache__
-cover/
+htmlcov/
 venv/

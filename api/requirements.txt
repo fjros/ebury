@@ -1,0 +1,5 @@
+falcon
+gunicorn
+pytest
+pytest-cov
+flake8

@@ -15,7 +15,7 @@ I could choose a full-featured web framework like *Django* to implement the appl
 
 Since I'm a backend developer, and given the time constraint, I'll focus initially on the REST API to have a working solution asap. This should allow me to have some leeway to determine the way to go for the client app. Then, if time permits, I'll iterate on the backend implementation to improve as many aspects as I can.
 
-From the beginning I'll write working and clean code. It will include integration and/or unit tests. However, I might delay (or even neglect) potential architectural improvements depending on their impact on the problem at hand and, more importantly, on my available time.
+From the beginning I'll write working and clean code. It will include integration and/or unit tests, code coverage, and PEP8 style checks (including checks for high cyclomatic complexity). However, I might delay (or even neglect) potential architectural improvements depending on their impact on the problem at hand and, more importantly, on my available time.
 
 REST endpoints will be documented using the Swagger (OpenAPI) format. I'll address validation errors as time permits.
 
