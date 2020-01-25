@@ -55,6 +55,14 @@ class TestGetRates(testing.TestCase):
             self.assertEqual(sell_currency, base)
             self.assertEqual(rate, fixture['rates'].get(buy_currency))
 
+    def test_get_rates_fails_missing_currency_return_400(self):
+        r = self.simulate_get('/api/v1/rates')
+        self.assertEqual(r.status, falcon.HTTP_400)
+
+    def test_get_rates_fails_unknown_currency_return_400(self):
+        r = self.simulate_get('/api/v1/rates', params={'currency': 'unknown'})
+        self.assertEqual(r.status, falcon.HTTP_400)
+
     @requests_mock.Mocker()
     def test_get_usd_rates_fails_free_plan_return_502(self, mock):
         """This test simulates you have a free plan in fixer.io

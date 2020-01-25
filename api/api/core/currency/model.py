@@ -23,6 +23,8 @@ class Currency:
 
     def __init__(self, symbol: str):
         self._symbol = symbol.upper()
+        if self._symbol not in self._symbols:
+            raise ValueError()
 
     def __eq__(self, other):
         return self.symbol == other.symbol

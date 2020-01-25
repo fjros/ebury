@@ -1,5 +1,17 @@
+from pydantic import BaseModel
+from pydantic import validator
+
 from api.adapter.common.serializer import DictTransformerMixin
+from api.core.currency.model import Currency
 from api.core.rate.model import Rate
+
+
+class RateRequest(BaseModel):
+    currency: str
+
+    @validator('currency')
+    def currency_must_be_a_supported_symbol(cls, currency):
+        return Currency(currency).symbol
 
 
 class RateResponse(DictTransformerMixin):
