@@ -1,6 +1,6 @@
 from typing import List
 
-from api.core.currency import Currency
+from api.core.currency.model import Currency
 
 
 class CurrencyService:

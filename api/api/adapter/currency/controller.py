@@ -1,8 +1,8 @@
 import falcon
 
-from api.adapter.common import Serializer
+from api.adapter.common.serializer import Serializer
 from api.adapter.currency.resource import CurrencyResponse
-from api.core.currency import CurrencyService
+from api.core.currency.service import CurrencyService
 
 
 class CurrenciesController:

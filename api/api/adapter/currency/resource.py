@@ -1,5 +1,5 @@
-from api.adapter.common import DictTransformerMixin
-from api.core.currency import Currency
+from api.adapter.common.serializer import DictTransformerMixin
+from api.core.currency.model import Currency
 
 
 class CurrencyResponse(DictTransformerMixin):
