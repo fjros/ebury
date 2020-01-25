@@ -21,7 +21,7 @@ class TestGetRates(testing.TestCase):
         mock.get(self.fixer_endpoint, status_code=200, text=fixture_get_eur_rates_succeeds)
 
         base = 'EUR'
-        r = self.simulate_get('/api/v1/rates', params={'currency': base})
+        r = self.simulate_get('/api/v1/rates', params={'symbol': base})
         self.assertEqual(r.status, falcon.HTTP_200)
 
         fixture = json.loads(fixture_get_eur_rates_succeeds)
@@ -42,7 +42,7 @@ class TestGetRates(testing.TestCase):
         mock.get(self.fixer_endpoint, status_code=200, text=fixture_get_usd_rates_succeeds)
 
         base = 'USD'
-        r = self.simulate_get('/api/v1/rates', params={'currency': base})
+        r = self.simulate_get('/api/v1/rates', params={'symbol': base})
         self.assertEqual(r.status, falcon.HTTP_200)
 
         fixture = json.loads(fixture_get_usd_rates_succeeds)
@@ -60,7 +60,7 @@ class TestGetRates(testing.TestCase):
         self.assertEqual(r.status, falcon.HTTP_400)
 
     def test_get_rates_fails_unknown_currency_return_400(self):
-        r = self.simulate_get('/api/v1/rates', params={'currency': 'unknown'})
+        r = self.simulate_get('/api/v1/rates', params={'symbol': 'unknown'})
         self.assertEqual(r.status, falcon.HTTP_400)
 
     @requests_mock.Mocker()
@@ -71,7 +71,7 @@ class TestGetRates(testing.TestCase):
         mock.get(self.fixer_endpoint, status_code=200, text=fixture_get_usd_rates_fails)
 
         base = 'USD'
-        r = self.simulate_get('/api/v1/rates', params={'currency': base})
+        r = self.simulate_get('/api/v1/rates', params={'symbol': base})
         self.assertEqual(r.status, falcon.HTTP_502)
 
     @requests_mock.Mocker()
@@ -79,7 +79,7 @@ class TestGetRates(testing.TestCase):
         mock.get(self.fixer_endpoint, status_code=400)
 
         base = 'EUR'
-        r = self.simulate_get('/api/v1/rates', params={'currency': base})
+        r = self.simulate_get('/api/v1/rates', params={'symbol': base})
         self.assertEqual(r.status, falcon.HTTP_502)
 
     @requests_mock.Mocker()
@@ -87,7 +87,7 @@ class TestGetRates(testing.TestCase):
         mock.get(self.fixer_endpoint, exc=requests.exceptions.Timeout)
 
         base = 'EUR'
-        r = self.simulate_get('/api/v1/rates', params={'currency': base})
+        r = self.simulate_get('/api/v1/rates', params={'symbol': base})
         self.assertEqual(r.status, falcon.HTTP_504)
 
 

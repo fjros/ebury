@@ -7,11 +7,11 @@ from api.core.rate.model import Rate
 
 
 class RateRequest(BaseModel):
-    currency: str
+    symbol: str
 
-    @validator('currency')
-    def currency_must_be_a_supported_symbol(cls, currency):
-        return Currency(currency).symbol
+    @validator('symbol')
+    def symbol_must_be_supported(cls, symbol):
+        return Currency(symbol).symbol
 
 
 class RateResponse(DictTransformerMixin):

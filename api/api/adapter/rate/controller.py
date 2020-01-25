@@ -27,7 +27,7 @@ class RatesController:
         """
 
         rate_request = self._parse_rate_request(request)
-        rates = self._get_rates(rate_request.currency)
+        rates = self._get_rates(rate_request.symbol)
 
         body = [RateResponse.from_rate(rate).dict() for rate in rates]
         response.body = Serializer.output(body)
@@ -35,15 +35,15 @@ class RatesController:
 
     def _parse_rate_request(self, request: falcon.Request) -> RateRequest:
         try:
-            return RateRequest(currency=request.get_param('currency'))
+            return RateRequest(symbol=request.get_param('symbol'))
 
         except ValidationError:
             raise falcon.HTTPBadRequest()
 
-    def _get_rates(self, currency: str) -> List[Rate]:
+    def _get_rates(self, symbol: str) -> List[Rate]:
         backend = FixerRateBackend(self.config.fixer_access_key)
         service = RateService(backend)
-        currency = Currency(currency)
+        currency = Currency(symbol)
 
         try:
             return service.get_rates(currency)
