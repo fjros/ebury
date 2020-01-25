@@ -1,4 +1,6 @@
-from typing import Dict, List
+from typing import Dict
+from typing import List
+from typing import Union
 
 from pydantic import BaseModel
 
@@ -44,9 +46,6 @@ class FixerRateBackend(RateBackend):
             raise RateBackendTimeoutException()
 
         response = FixerResponse(**raw_response)
-        if not response.success:
-            raise RateBackendErrorException()
-
         return response.get_rates()
 
 
@@ -54,14 +53,21 @@ class FixerResponse(BaseModel):
     """Response from fixer.io
     """
 
-    success: bool
-    timestamp: int
-    base: str
-    rates: Dict[str, float]
+    success: bool                             # common
+
+    timestamp: int = None                     # success response
+    base: str = None
+    rates: Dict[str, float] = None
+
+    error: Dict[str, Union[int, str]] = None  # error response
 
     def get_rates(self) -> List[Rate]:
+        """Build list of rate models from the fixer.io response
+
+        :raises `RateBackendErrorException`: Error response from fixer.io
+        """
+
+        if not self.success:
+            raise RateBackendErrorException()
+
         return [Rate(self.base, buy_currency, rate) for buy_currency, rate in self.rates.items()]
-
-
-class FixerSuccessResponse(FixerResponse):
-    pass

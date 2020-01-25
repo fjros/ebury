@@ -24,13 +24,7 @@ class HttpJson:
             raise HttpJsonTimeoutException()
 
         except requests.exceptions.HTTPError as e:
-            if e.response is not None:
-                raise HttpJsonErrorException(status=str(e.response.status_code))
-
-            raise HttpJsonErrorException()
-
-        except Exception:
-            raise
+            raise HttpJsonErrorException(status=str(e.response.status_code))
 
         return r.json()
 
