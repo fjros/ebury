@@ -1,5 +1,9 @@
 falcon
 gunicorn
+pydantic
+requests
+
+flake8
 pytest
 pytest-cov
-flake8
+requests-mock

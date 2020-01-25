@@ -22,7 +22,13 @@ class Currency:
     }
 
     def __init__(self, symbol: str):
-        self._symbol = symbol
+        self._symbol = symbol.upper()
+
+    def __eq__(self, other):
+        return self.symbol == other.symbol
+
+    def __ne__(self, other):
+        return self.symbol != other.symbol
 
     @property
     def symbol(self):
