@@ -5,6 +5,7 @@
 .Trashes
 .idea
 .coverage
+.pytest_cache
 *.swp
 *.pyc
 *.log
