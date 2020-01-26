@@ -1,3 +1,5 @@
+from typing import List
+
 from api.core.currency.model import Currency
 from api.core.trade.model import Trade
 from api.core.trade.repository import TradeRepository
@@ -19,3 +21,9 @@ class TradeService:
 
         trade = Trade.build(sell_currency, sell_amount, buy_currency, buy_amount, rate)
         return self._repository.save(trade)
+
+    def get_trades(self) -> List[Trade]:
+        """Get list of booked trades
+        """
+
+        return self._repository.find_all()

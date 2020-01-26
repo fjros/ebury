@@ -1,3 +1,5 @@
+from typing import List
+
 import falcon
 
 from api.adapter.common.deserializer import Deserializer
@@ -14,6 +16,16 @@ from api.core.trade.service import TradeService
 class TradesController:
     """Controller of the /trades endpoint
     """
+
+    def on_get(self, request: falcon.Request, response: falcon.Response):
+        """Get list of trades
+        """
+
+        trades = self._get_trades(request.context)
+
+        body = [TradeResponse.from_trade(trade).dict() for trade in trades]
+        response.body = Serializer.output(body)
+        response.status = falcon.HTTP_200
 
     def on_post(self, request: falcon.Request, response: falcon.Response):
         """Create a trade
@@ -49,3 +61,8 @@ class TradesController:
 
         except InconsistentTradeException:
             raise falcon.HTTPBadRequest()
+
+    def _get_trades(self, request_context) -> List[Trade]:
+        repository = SqlAlchemyTradeRepository(request_context.session)
+        service = TradeService(repository)
+        return service.get_trades()
