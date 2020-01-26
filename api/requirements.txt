@@ -1,7 +1,9 @@
+alembic
 falcon
 gunicorn
 pydantic
 requests
+SQLAlchemy
 
 flake8
 pytest

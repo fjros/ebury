@@ -9,6 +9,7 @@
 *.swp
 *.pyc
 *.log
+*.db
 __pycache__
 htmlcov/
 venv/

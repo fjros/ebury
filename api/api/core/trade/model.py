@@ -2,29 +2,32 @@ import random
 import string
 from datetime import datetime
 
+from sqlalchemy import Column
+from sqlalchemy import DateTime
+from sqlalchemy import Float
+from sqlalchemy import Integer
+from sqlalchemy import String
+
 from api.core.currency.model import Currency
+from api.orm import Base
 
 
-class Trade:
+class Trade(Base):
     """Trade model
     """
 
-    id: str
-    sell_currency: str
-    sell_amount: int
-    buy_currency: str
-    buy_amount: int
-    rate: float
-    created_at: datetime
+    __tablename__ = 'trade'
+
+    id = Column(String(9), primary_key=True)
+    sell_currency = Column(String(3), nullable=False)
+    sell_amount = Column(Integer, nullable=False)
+    buy_currency = Column(String(3), nullable=False)
+    buy_amount = Column(Integer, nullable=False)
+    rate = Column(Float, nullable=False)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     def __init__(self, **kwargs):
-        self.id = kwargs.get('id')
-        self.sell_currency = kwargs.get('sell_currency')
-        self.sell_amount = kwargs.get('sell_amount')
-        self.buy_currency = kwargs.get('buy_currency')
-        self.buy_amount = kwargs.get('buy_amount')
-        self.rate = kwargs.get('rate')
-        self.created_at = kwargs.get('created_at', datetime.utcnow())
+        super().__init__(**kwargs)
 
     @classmethod
     def build(cls, sell_currency: Currency, sell_amount: int,
