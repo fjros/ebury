@@ -1,5 +1,6 @@
 <template>
     <div id="trade-table">
+        <h1>Booked Trades</h1>
         <thead>
             <tr>
                 <th>Sell CCY</th>
@@ -34,9 +35,30 @@
 <script>
     export default {
         name: 'trade-table',
-        props: {
-            trades: Array,
+
+        methods: {
+            async getTrades() {
+                try {
+                    const response = await fetch('http://localhost:8000/api/v1/trades')
+                    const data = await response.json()
+                    this.trades = data
+                } catch (error) {
+                    // TODO: provide user with feedback
+                    console.error(error)
+                }
+            }
         },
+
+        data() {
+            return {
+                trades: []
+            }
+        },
+
+        mounted() {
+            this.getTrades()
+        },
+
         computed: {
             hasTrades: function() {
                 return this.trades.length
