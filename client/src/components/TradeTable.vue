@@ -21,7 +21,7 @@
           <td>{{ trade.buy_currency }}</td>
           <td>{{ trade.buy_amount / 100 }}</td>
           <td>{{ trade.rate }}</td>
-          <td>{{ trade.created_at }}</td>
+          <td>{{ new Date(trade.created_at).toLocaleString() }}</td>
         </tr>
       </tbody>
     </template>
