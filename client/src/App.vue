@@ -12,13 +12,32 @@ import TradeTable from './components/TradeTable.vue'
 
 export default {
   name: 'app',
+
   components: {
     TradeTable
   },
+
+  methods: {
+    async getTrades() {
+      try {
+        const response = await fetch('http://localhost:8000/api/v1/trades')
+        const data = await response.json()
+        this.trades = data
+      } catch (error) {
+        // TODO: provide user with feedback
+        console.error(error)
+      }
+    }
+  },
+
   data() {
     return {
       trades: []
     }
+  },
+
+  mounted() {
+    this.getTrades()
   }
 }
 </script>
