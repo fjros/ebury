@@ -92,7 +92,7 @@ class TestTrades(testing.TestCase):
 
         created_at = response['created_at']
         self.assertIsInstance(created_at, str)
-        datetime.strptime(created_at, '%Y/%m/%d %H:%M:%S')  # str can be parsed as a datetime
+        datetime.strptime(created_at, '%Y/%m/%d %H:%M:%S GMT')  # str can be parsed as a datetime
 
         for field in request.keys():
             self.assertEqual(request[field], response[field])
