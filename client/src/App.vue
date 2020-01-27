@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img alt="Ebury logo" src="./assets/logo.png">
+    <img alt="Ebury logo" src="./assets/logo.png" />
 
     <router-view></router-view>
   </div>
@@ -8,13 +8,13 @@
 
 <script>
 export default {
-  name: 'app'
-}
+  name: "app"
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
