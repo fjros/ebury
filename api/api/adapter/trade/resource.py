@@ -76,4 +76,4 @@ class TradeResponse(DictTransformerMixin):
                              trade.buy_currency,
                              trade.buy_amount,
                              trade.rate,
-                             trade.created_at.strftime('%Y/%m/%d %H:%M:%S'))
+                             trade.created_at.strftime('%Y/%m/%d %H:%M:%S GMT'))
