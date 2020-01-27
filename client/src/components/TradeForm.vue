@@ -28,6 +28,7 @@
   </div>
 </template>
 
+
 <script>
 export default {
   name: "trade-form",
@@ -170,8 +171,10 @@ export default {
 };
 </script>
 
+
 <style scoped>
 button {
+  margin-top: 10px;
   margin-right: 10px;
 }
 </style>

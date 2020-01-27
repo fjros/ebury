@@ -30,6 +30,8 @@
       <!-- show message if no trades yet -->
       <p>No trades booked yet</p>
     </template>
+
+    <router-link to="/new" tag="button">New Trade</router-link>
   </div>
 </template>
 
@@ -71,4 +73,8 @@ export default {
 
 
 <style scoped>
+button {
+  margin-top: 10px;
+  margin-right: 10px;
+}
 </style>
