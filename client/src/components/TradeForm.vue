@@ -47,7 +47,7 @@ export default {
       }
 
       try {
-        const response = await fetch("http://localhost:8000/api/v1/trades", {
+        const response = await fetch("/api/v1/trades", {
           method: "post",
           body: JSON.stringify({
             sell_currency: this.trade.sell_currency,
@@ -68,7 +68,7 @@ export default {
 
     async getCurrencies() {
       try {
-        const response = await fetch("http://localhost:8000/api/v1/currencies");
+        const response = await fetch("/api/v1/currencies");
         const data = await response.json();
         this.currencies = data;
       } catch (error) {
@@ -84,15 +84,9 @@ export default {
       }
 
       try {
-        let url = new URL("http://localhost:8000/api/v1/rates");
-        let params = { symbol: this.trade.sell_currency };
-        Object.keys(params).forEach(key =>
-          url.searchParams.append(key, params[key])
-        );
-
         // could cache rates to avoid API calls...
         // but likely "rate freshness" is more important here
-        const response = await fetch(url);
+        const response = await fetch("/api/v1/rates?symbol=" + this.trade.sell_currency);
         const data = await response.json();
         this.rates = data;
 

@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  api:
+    build: ./api
+    command: "gunicorn --bind 0.0.0.0:8000 'api.app:get_app()'"
+    env_file:
+      - .api.env
+    expose:
+      - 8000
+    restart: always
+
+  front:
+    build: ./client
+    ports:
+      - "8080:80"
+    restart: always
+    depends_on:
+      - api

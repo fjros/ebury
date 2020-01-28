@@ -43,7 +43,7 @@ export default {
   methods: {
     async getTrades() {
       try {
-        const response = await fetch("http://localhost:8000/api/v1/trades");
+        const response = await fetch("/api/v1/trades");
         const data = await response.json();
         this.trades = data;
       } catch (error) {
