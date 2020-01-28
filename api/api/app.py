@@ -17,7 +17,7 @@ def get_app() -> falcon.API:
     api = falcon.API(middleware=[session_manager])
 
     api.add_route('{}/currencies'.format(config.base_uri), CurrenciesController())
-    api.add_route('{}/rates'.format(config.base_uri), RatesController(config))
+    api.add_route('{}/rates'.format(config.base_uri), RatesController())
     api.add_route('{}/trades'.format(config.base_uri), TradesController())
 
     return api

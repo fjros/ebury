@@ -19,8 +19,8 @@ class RatesController:
     """Controller of the /rates endpoint
     """
 
-    def __init__(self, config: Configuration):
-        self.config = config
+    def __init__(self):
+        self.config = Configuration()
 
     def on_get(self, request: falcon.Request, response: falcon.Response):
         """Return the list of 'buy' rates for a given 'sell' currency
