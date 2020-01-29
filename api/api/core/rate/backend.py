@@ -28,9 +28,25 @@ class RateBackendErrorException(Exception):
     def __init__(self, status: str = None):
         self.status = status
 
+    def errors(self):
+        return [
+            {
+                'loc': [''],
+                'msg': 'error response from backend: {}'.format(self.status),
+                'type': 'bad_gateway'
+            }
+        ]
+
 
 class RateBackendTimeoutException(Exception):
     """Exception raised when a backend request times out
     """
 
-    pass
+    def errors(self):
+        return [
+            {
+                'loc': [''],
+                'msg': 'backend response timed out',
+                'type': 'gateway_timeout'
+            }
+        ]

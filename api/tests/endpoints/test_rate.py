@@ -59,9 +59,15 @@ class TestGetRates(testing.TestCase):
         r = self.simulate_get('/api/v1/rates')
         self.assertEqual(r.status, falcon.HTTP_400)
 
+        error_response = r.json
+        self.validate_error_body(error_response)
+
     def test_get_rates_fails_unknown_currency_return_400(self):
         r = self.simulate_get('/api/v1/rates', params={'symbol': 'unknown'})
         self.assertEqual(r.status, falcon.HTTP_400)
+
+        error_response = r.json
+        self.validate_error_body(error_response)
 
     @requests_mock.Mocker()
     def test_get_usd_rates_fails_free_plan_return_502(self, mock):
@@ -74,6 +80,9 @@ class TestGetRates(testing.TestCase):
         r = self.simulate_get('/api/v1/rates', params={'symbol': base})
         self.assertEqual(r.status, falcon.HTTP_502)
 
+        error_response = r.json
+        self.validate_error_body(error_response)
+
     @requests_mock.Mocker()
     def test_get_rates_fails_backend_error_return_502(self, mock):
         mock.get(self.fixer_endpoint, status_code=400)
@@ -82,6 +91,9 @@ class TestGetRates(testing.TestCase):
         r = self.simulate_get('/api/v1/rates', params={'symbol': base})
         self.assertEqual(r.status, falcon.HTTP_502)
 
+        error_response = r.json
+        self.validate_error_body(error_response)
+
     @requests_mock.Mocker()
     def test_get_rates_fails_backend_timeout_return_504(self, mock):
         mock.get(self.fixer_endpoint, exc=requests.exceptions.Timeout)
@@ -89,6 +101,18 @@ class TestGetRates(testing.TestCase):
         base = 'EUR'
         r = self.simulate_get('/api/v1/rates', params={'symbol': base})
         self.assertEqual(r.status, falcon.HTTP_504)
+
+        error_response = r.json
+        self.validate_error_body(error_response)
+
+    def validate_error_body(self, response: dict):
+        """NOTE: With more time I'd actually check if the full response is as expected
+        """
+
+        error = response.get('errors')[0]
+        self.assertEqual(type(error.get('loc')), list)
+        self.assertEqual(type(error.get('msg')), str)
+        self.assertEqual(type(error.get('type')), str)
 
 
 fixture_get_eur_rates_succeeds = '''{

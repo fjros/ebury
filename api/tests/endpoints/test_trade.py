@@ -42,6 +42,9 @@ class TestTrades(testing.TestCase):
         r = self.simulate_post(self.endpoint)
         self.assertEqual(r.status, falcon.HTTP_400)
 
+        error_response = r.json
+        self.validate_error_body(error_response)
+
     def test_create_trade_fails_inconsistent_return_400(self):
         """Rate doesn't make sense for the given amounts
         """
@@ -55,6 +58,9 @@ class TestTrades(testing.TestCase):
         }
         r = self.simulate_post(self.endpoint, json=trade_request)
         self.assertEqual(r.status, falcon.HTTP_400)
+
+        error_response = r.json
+        self.validate_error_body(error_response)
 
     def test_get_trades_success_empty_list(self):
         r = self.simulate_get(self.endpoint)
@@ -96,3 +102,12 @@ class TestTrades(testing.TestCase):
 
         for field in request.keys():
             self.assertEqual(request[field], response[field])
+
+    def validate_error_body(self, response: dict):
+        """NOTE: With more time I'd actually check if the full response is as expected
+        """
+
+        error = response.get('errors')[0]
+        self.assertEqual(type(error.get('loc')), list)
+        self.assertEqual(type(error.get('msg')), str)
+        self.assertEqual(type(error.get('type')), str)

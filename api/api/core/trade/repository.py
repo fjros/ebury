@@ -14,11 +14,11 @@ class TradeRepository(ABC):
         """Retrieve all trades from the database
         """
 
-        raise NotImplementedError()
+        pass
 
     @abstractmethod
     def save(self, trade: Trade) -> Trade:
         """Save trade in database
         """
 
-        raise NotImplementedError()
+        pass

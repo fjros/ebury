@@ -3,6 +3,7 @@ from typing import List
 import falcon
 from pydantic import ValidationError
 
+from api.adapter.common.error import HTTPErrorResponse
 from api.adapter.rate.resource import RateRequest
 from api.adapter.rate.resource import RateResponse
 from api.binding.transformer import TransformerBinding
@@ -33,8 +34,8 @@ class RatesController:
         try:
             return RateRequest(symbol=request.get_param('symbol'))
 
-        except ValidationError:
-            raise falcon.HTTPBadRequest()
+        except ValidationError as e:
+            raise HTTPErrorResponse(falcon.HTTP_400, errors=e.errors())
 
     def _get_rates(self, symbol: str) -> List[Rate]:
         service = RateService()
@@ -42,8 +43,8 @@ class RatesController:
         try:
             return service.get_rates(symbol)
 
-        except RateBackendErrorException:
-            raise falcon.HTTPBadGateway()
+        except RateBackendErrorException as e:
+            raise HTTPErrorResponse(falcon.HTTP_502, errors=e.errors())
 
-        except RateBackendTimeoutException:
-            raise falcon.HTTPGatewayTimeout()
+        except RateBackendTimeoutException as e:
+            raise HTTPErrorResponse(falcon.HTTP_504, errors=e.errors())

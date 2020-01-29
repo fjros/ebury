@@ -1,7 +1,9 @@
 from typing import List
 
 import falcon
+from pydantic import ValidationError
 
+from api.adapter.common.error import HTTPErrorResponse
 from api.adapter.trade.resource import TradeRequest
 from api.adapter.trade.resource import TradeResponse
 from api.binding.transformer import TransformerBinding
@@ -41,8 +43,14 @@ class TradesController:
             resource = TransformerBinding.get().deserialize(payload)
             return TradeRequest(**resource)
 
+        except ValidationError as e:
+            raise HTTPErrorResponse(falcon.HTTP_400, errors=e.errors())
+
         except Exception:
-            raise falcon.HTTPBadRequest()
+            raise HTTPErrorResponse(
+                falcon.HTTP_400,
+                errors=[{'loc': [''], 'msg': 'cannot read request body', 'type': 'value_error'}]
+            )
 
     def _create_trade(self, request_context, trade_request: TradeRequest) -> Trade:
         service = TradeService(request_context.session)
