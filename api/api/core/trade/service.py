@@ -23,7 +23,7 @@ class TradeService:
                      rate: float) -> Trade:
         """Create trade
 
-        :raises `InconsistentTradeException`:
+        :raises `ValueError`:
         """
 
         sell_currency = Currency(sell_symbol)

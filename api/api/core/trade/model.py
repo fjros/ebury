@@ -30,21 +30,21 @@ class Trade(Base):
         super().__init__(**kwargs)
 
     @classmethod
-    def build(cls, sell_currency: Currency, sell_amount: int,
-              buy_currency: Currency, buy_amount: int, rate: float):
+    def build(cls,
+              sell_currency: Currency,
+              sell_amount: int,
+              buy_currency: Currency,
+              buy_amount: int,
+              rate: float):
         """Build corresponding trade
 
         This should implement the business requirements for the trade. Since I don't know them, I'm
-        just going to implement a simple rule as an example:
+        just going to implement a simple rule as an example.
 
-        a) If rate < 1  => sell_amount > buy_amount
-        b) If rate >= 1 => sell_amount <= buy_amount
-
-        :raises `InconsistentTradeException`:
+        :raises `ValueError`:
         """
 
-        if (rate < 1 and sell_amount <= buy_amount) or (rate >= 1 and sell_amount > buy_amount):
-            raise InconsistentTradeException()
+        cls.check_consistency(sell_amount, buy_amount, rate)
 
         trade_id = cls._generate_trade_id()
         return Trade(id=trade_id,
@@ -53,6 +53,19 @@ class Trade(Base):
                      buy_currency=buy_currency.symbol,
                      buy_amount=buy_amount,
                      rate=rate)
+
+    @classmethod
+    def check_consistency(cls, sell_amount: int, buy_amount: int, rate: float):
+        """Check the following (hypothetical) business logic
+
+        a) If rate < 1  => sell_amount > buy_amount
+        b) If rate >= 1 => sell_amount <= buy_amount
+
+        :raises `ValueError`:
+        """
+
+        if (rate < 1 and sell_amount <= buy_amount) or (rate >= 1 and sell_amount > buy_amount):
+            raise ValueError('rate not consistent with given trade amounts')
 
     @classmethod
     def _generate_trade_id(cls):
@@ -67,10 +80,3 @@ class Trade(Base):
         """
 
         return 'TR' + ''.join(random.choices(string.ascii_letters + string.digits, k=7))
-
-
-class InconsistentTradeException(Exception):
-    """Raised when a trade violates its invariants
-    """
-
-    pass

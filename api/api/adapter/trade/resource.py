@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from pydantic import root_validator
 from pydantic import validator
 
 from api.adapter.common.resource import ToDictMixin
@@ -17,7 +18,7 @@ class TradeRequest(BaseModel):
     rate: float
 
     @validator('sell_currency')
-    def sell_currency_symbol_must_be_supported(cls, symbol):
+    def sell_currency_symbol_supported(cls, symbol):
         return cls._validate_supported_symbol(symbol)
 
     @validator('sell_amount')
@@ -25,7 +26,7 @@ class TradeRequest(BaseModel):
         return cls._validate_positive_number(amount)
 
     @validator('buy_currency')
-    def buy_currency_symbol_must_be_supported(cls, symbol):
+    def buy_currency_symbol_supported(cls, symbol):
         return cls._validate_supported_symbol(symbol)
 
     @validator('buy_amount')
@@ -36,10 +37,19 @@ class TradeRequest(BaseModel):
     def rate_positive(cls, rate):
         return cls._validate_positive_number(rate)
 
+    @root_validator
+    def trade_consistency(cls, values):
+        sell_amount = values.get('sell_amount')
+        buy_amount = values.get('buy_amount')
+        rate = values.get('rate')
+
+        Trade.check_consistency(sell_amount, buy_amount, rate)
+        return values
+
     @classmethod
     def _validate_positive_number(cls, amount):
         if amount <= 0:
-            raise ValueError()
+            raise ValueError('number must be greater than zero')
 
         return amount
 
