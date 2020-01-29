@@ -1,7 +1,7 @@
 from typing import List
 
+from api.binding.backend import RateBackendBinding
 from api.core.currency.model import Currency
-from api.core.rate.backend import RateBackend
 from api.core.rate.model import Rate
 
 
@@ -9,8 +9,8 @@ class RateService:
     """Application Service that deals with exchange rates
     """
 
-    def __init__(self, backend: RateBackend):
-        self.backend = backend
+    def __init__(self):
+        self._backend = RateBackendBinding.get()
 
     def get_rates(self, currency: Currency) -> List[Rate]:
         """Return list of exchange rates for the given 'sell' currency
@@ -21,4 +21,4 @@ class RateService:
         :raises `BackendTimeout`: Timed out before getting response from rates backend.
         """
 
-        return self.backend.get_rates(currency)
+        return self._backend.get_rates(currency)

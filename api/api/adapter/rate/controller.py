@@ -3,11 +3,9 @@ from typing import List
 import falcon
 from pydantic import ValidationError
 
-from api.config import Configuration
 from api.adapter.common.serializer import Serializer
 from api.adapter.rate.resource import RateRequest
 from api.adapter.rate.resource import RateResponse
-from api.adapter.rate.backend import FixerRateBackend
 from api.core.currency.model import Currency
 from api.core.rate.backend import RateBackendErrorException
 from api.core.rate.backend import RateBackendTimeoutException
@@ -18,9 +16,6 @@ from api.core.rate.service import RateService
 class RatesController:
     """Controller of the /rates endpoint
     """
-
-    def __init__(self):
-        self.config = Configuration()
 
     def on_get(self, request: falcon.Request, response: falcon.Response):
         """Return the list of 'buy' rates for a given 'sell' currency
@@ -41,8 +36,7 @@ class RatesController:
             raise falcon.HTTPBadRequest()
 
     def _get_rates(self, symbol: str) -> List[Rate]:
-        backend = FixerRateBackend(self.config.fixer_access_key)
-        service = RateService(backend)
+        service = RateService()
         currency = Currency(symbol)
 
         try:
