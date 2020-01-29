@@ -3,9 +3,9 @@ from typing import List
 import falcon
 from pydantic import ValidationError
 
-from api.adapter.common.serializer import Serializer
 from api.adapter.rate.resource import RateRequest
 from api.adapter.rate.resource import RateResponse
+from api.binding.transformer import TransformerBinding
 from api.core.currency.model import Currency
 from api.core.rate.backend import RateBackendErrorException
 from api.core.rate.backend import RateBackendTimeoutException
@@ -25,7 +25,7 @@ class RatesController:
         rates = self._get_rates(rate_request.symbol)
 
         body = [RateResponse.from_rate(rate).dict() for rate in rates]
-        response.body = Serializer.output(body)
+        response.body = TransformerBinding.get().serialize(body)
         response.status = falcon.HTTP_200
 
     def _parse_rate_request(self, request: falcon.Request) -> RateRequest:

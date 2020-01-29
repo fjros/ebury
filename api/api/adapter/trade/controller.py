@@ -2,10 +2,9 @@ from typing import List
 
 import falcon
 
-from api.adapter.common.deserializer import Deserializer
-from api.adapter.common.serializer import Serializer
 from api.adapter.trade.resource import TradeRequest
 from api.adapter.trade.resource import TradeResponse
+from api.binding.transformer import TransformerBinding
 from api.core.currency.model import Currency
 from api.core.trade.model import Trade
 from api.core.trade.model import InconsistentTradeException
@@ -23,7 +22,7 @@ class TradesController:
         trades = self._get_trades(request.context)
 
         body = [TradeResponse.from_trade(trade).dict() for trade in trades]
-        response.body = Serializer.output(body)
+        response.body = TransformerBinding.get().serialize(body)
         response.status = falcon.HTTP_200
 
     def on_post(self, request: falcon.Request, response: falcon.Response):
@@ -34,14 +33,14 @@ class TradesController:
         trade = self._create_trade(request.context, trade_request)
 
         body = TradeResponse.from_trade(trade).dict()
-        response.body = Serializer.output(body)
+        response.body = TransformerBinding.get().serialize(body)
         response.set_header('Location', '{}/{}'.format(request.uri, trade.id))
         response.status = falcon.HTTP_201
 
     def _parse_trade_request(self, request: falcon.Request) -> TradeRequest:
         try:
             payload = request.stream.read(request.content_length or 0).decode('utf-8')
-            resource = Deserializer.input(payload)
+            resource = TransformerBinding.get().deserialize(payload)
             return TradeRequest(**resource)
 
         except Exception:
