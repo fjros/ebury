@@ -12,7 +12,7 @@ class RateService:
     def __init__(self):
         self._backend = RateBackendBinding.get()
 
-    def get_rates(self, currency: Currency) -> List[Rate]:
+    def get_rates(self, symbol: str) -> List[Rate]:
         """Return list of exchange rates for the given 'sell' currency
 
         Exchange rates are retrieved from a 3rd-party provider (backend).
@@ -21,4 +21,5 @@ class RateService:
         :raises `BackendTimeout`: Timed out before getting response from rates backend.
         """
 
+        currency = Currency(symbol)
         return self._backend.get_rates(currency)

@@ -6,7 +6,6 @@ from pydantic import ValidationError
 from api.adapter.rate.resource import RateRequest
 from api.adapter.rate.resource import RateResponse
 from api.binding.transformer import TransformerBinding
-from api.core.currency.model import Currency
 from api.core.rate.backend import RateBackendErrorException
 from api.core.rate.backend import RateBackendTimeoutException
 from api.core.rate.model import Rate
@@ -39,10 +38,9 @@ class RatesController:
 
     def _get_rates(self, symbol: str) -> List[Rate]:
         service = RateService()
-        currency = Currency(symbol)
 
         try:
-            return service.get_rates(currency)
+            return service.get_rates(symbol)
 
         except RateBackendErrorException:
             raise falcon.HTTPBadGateway()
