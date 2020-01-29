@@ -5,9 +5,9 @@ class Rate:
     """Rate model
     """
 
-    def __init__(self, sell_currency: str, buy_currency: str, rate: float):
-        self._sell_currency = Currency(sell_currency)
-        self._buy_currency = Currency(buy_currency)
+    def __init__(self, sell_currency: Currency, buy_currency: Currency, rate: float):
+        self._sell_currency = sell_currency
+        self._buy_currency = buy_currency
         self._rate = rate
 
     @property

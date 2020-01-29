@@ -70,4 +70,7 @@ class FixerResponse(BaseModel):
         if not self.success:
             raise RateBackendErrorException()
 
-        return [Rate(self.base, buy_currency, rate) for buy_currency, rate in self.rates.items()]
+        return [
+            Rate(Currency(self.base), Currency(buy_currency), rate)
+            for buy_currency, rate in self.rates.items()
+        ]
