@@ -1,13 +1,16 @@
+from abc import ABC
+from abc import abstractmethod
 from typing import List
 
 from api.core.currency.model import Currency
 from api.core.rate.model import Rate
 
 
-class RateBackend:
+class RateBackend(ABC):
     """Base class for backends that provide us with exchange rates
     """
 
+    @abstractmethod
     def get_rates(self, currency: Currency) -> List[Rate]:
         """Return list of exchange rates from a 3rd-party service (backend)
 
@@ -15,7 +18,7 @@ class RateBackend:
         :raises `RateBackendTimeoutException`:
         """
 
-        raise NotImplementedError()
+        pass
 
 
 class RateBackendErrorException(Exception):
