@@ -1,8 +1,8 @@
-from api.adapter.common.serializer import DictTransformerMixin
+from api.adapter.common.resource import ToDictMixin
 from api.core.currency.model import Currency
 
 
-class CurrencyResponse(DictTransformerMixin):
+class CurrencyResponse(ToDictMixin):
     """API response model for a currency
     """
 

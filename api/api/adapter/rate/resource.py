@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from pydantic import validator
 
-from api.adapter.common.serializer import DictTransformerMixin
+from api.adapter.common.resource import ToDictMixin
 from api.core.currency.model import Currency
 from api.core.rate.model import Rate
 
@@ -14,7 +14,7 @@ class RateRequest(BaseModel):
         return Currency(symbol).symbol
 
 
-class RateResponse(DictTransformerMixin):
+class RateResponse(ToDictMixin):
     """API response model for an exchange rate
     """
 

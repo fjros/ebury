@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from pydantic import validator
 
-from api.adapter.common.serializer import DictTransformerMixin
+from api.adapter.common.resource import ToDictMixin
 from api.core.currency.model import Currency
 from api.core.trade.model import Trade
 
@@ -48,7 +48,7 @@ class TradeRequest(BaseModel):
         return Currency(symbol).symbol
 
 
-class TradeResponse(DictTransformerMixin):
+class TradeResponse(ToDictMixin):
     """API response model for a trade
     """
 
