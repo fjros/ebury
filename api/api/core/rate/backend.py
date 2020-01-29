@@ -18,7 +18,7 @@ class RateBackend(ABC):
         :raises `RateBackendTimeoutException`:
         """
 
-        pass
+        pass  # pragma: no cover
 
 
 class RateBackendErrorException(Exception):

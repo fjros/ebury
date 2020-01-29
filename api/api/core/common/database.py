@@ -12,11 +12,11 @@ class SessionManager(ABC):
         """Open database session
         """
 
-        pass
+        pass  # pragma: no cover
 
     @abstractmethod
     def close(self):
         """Close database session
         """
 
-        pass
+        pass  # pragma: no cover

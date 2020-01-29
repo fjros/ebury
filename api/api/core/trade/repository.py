@@ -14,11 +14,11 @@ class TradeRepository(ABC):
         """Retrieve all trades from the database
         """
 
-        pass
+        pass  # pragma: no cover
 
     @abstractmethod
     def save(self, trade: Trade) -> Trade:
         """Save trade in database
         """
 
-        pass
+        pass  # pragma: no cover

@@ -11,12 +11,12 @@ class Transformer(ABC):
     @classmethod
     @abstractmethod
     def serialize(cls, data: Any) -> str:
-        pass
+        pass  # pragma: no cover
 
     @classmethod
     @abstractmethod
     def deserialize(cls, data: str) -> Any:
-        pass
+        pass  # pragma: no cover
 
 
 class JsonTransformer(Transformer):
