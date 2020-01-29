@@ -9,7 +9,13 @@
       </select>
 
       <label>Sell Amount</label>
-      <input type="number" min="0.01" step="0.01" v-model="trade.sell_amount" @change="onSellAmountChange()"/>
+      <input
+        type="number"
+        min="0.01"
+        step="0.01"
+        v-model="trade.sell_amount"
+        @change="onSellAmountChange()"
+      />
 
       <label>Buy Currency</label>
       <select v-model="trade.buy_currency" @change="onBuyCurrencyChange()">
@@ -58,8 +64,14 @@ export default {
           })
         });
         const data = await response.json();
-        this.currencies = data;
-        this.$router.push({ path: "/" });
+
+        if (response.ok) {
+          this.currencies = data;
+          this.$router.push({ path: "/" });
+        }
+        else {
+          // TODO: provide user with feedback
+        }
       } catch (error) {
         // TODO: provide user with feedback
         console.error(error);
@@ -70,7 +82,12 @@ export default {
       try {
         const response = await fetch("/api/v1/currencies");
         const data = await response.json();
-        this.currencies = data;
+
+        if (response.ok) {
+          this.currencies = data;
+        } else {
+          // TODO: provide user with feedback
+        }
       } catch (error) {
         // TODO: provide user with feedback
         console.error(error);
@@ -86,15 +103,20 @@ export default {
       try {
         // could cache rates to avoid API calls...
         // but likely "rate freshness" is more important here
-        const response = await fetch("/api/v1/rates?symbol=" + this.trade.sell_currency);
+        const response = await fetch(
+          "/api/v1/rates?symbol=" + this.trade.sell_currency
+        );
         const data = await response.json();
-        this.rates = data;
 
-        this.setRate();
-        this.setBuyAmount();
+        if (response.ok) {
+          this.rates = data;
+          this.setRate();
+          this.setBuyAmount();
+        } else {
+          // TODO: provide user with feedback
+          this.cleanUp();
+        }
       } catch (error) {
-        // TODO: provide user with feedback
-        this.cleanUp();
         console.error(error);
       }
     },
