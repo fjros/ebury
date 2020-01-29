@@ -19,6 +19,8 @@ class RatesController:
 
     def on_get(self, request: falcon.Request, response: falcon.Response):
         """Return the list of 'buy' rates for a given 'sell' currency
+
+        The symbol of the 'sell' currency is given via a query param.
         """
 
         rate_request = self._parse_rate_request(request)

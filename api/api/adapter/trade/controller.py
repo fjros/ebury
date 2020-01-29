@@ -52,8 +52,10 @@ class TradesController:
 
         service = TradeService(request_context.session)
         try:
-            return service.create_trade(sell_currency, trade_request.sell_amount,
-                                        buy_currency, trade_request.buy_amount,
+            return service.create_trade(sell_currency,
+                                        trade_request.sell_amount,
+                                        buy_currency,
+                                        trade_request.buy_amount,
                                         trade_request.rate)
 
         except InconsistentTradeException:

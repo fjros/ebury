@@ -7,6 +7,9 @@ from api.core.rate.model import Rate
 
 
 class RateRequest(BaseModel):
+    """API request model to query the rates for a given base ('sell') currency
+    """
+
     symbol: str
 
     @validator('symbol')

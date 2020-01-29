@@ -15,8 +15,12 @@ class TradeService:
     def __init__(self, session: Any):
         self._repository = TradeRepositoryBinding.get(session)
 
-    def create_trade(self, sell_currency: Currency, sell_amount: int,
-                     buy_currency: Currency, buy_amount: int, rate: float) -> Trade:
+    def create_trade(self,
+                     sell_currency: Currency,
+                     sell_amount: int,
+                     buy_currency: Currency,
+                     buy_amount: int,
+                     rate: float) -> Trade:
         """Create trade
 
         :raises `InconsistentTradeException`:

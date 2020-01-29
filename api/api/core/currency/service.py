@@ -12,7 +12,7 @@ class CurrencyService:
     def get_currencies(self) -> List[Currency]:
         """Return set of pre-defined list of currencies
 
-        Given the low likelihood of change, no need to query fixer.io API continuously.
+        Given the low likelihood of change, no need to query backend continuously.
         In a real-world example we might retrieve this list from a memory cache (periodically
         updated by a background job).
         """
