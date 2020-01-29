@@ -5,7 +5,6 @@ import falcon
 from api.adapter.trade.resource import TradeRequest
 from api.adapter.trade.resource import TradeResponse
 from api.binding.transformer import TransformerBinding
-from api.core.currency.model import Currency
 from api.core.trade.model import Trade
 from api.core.trade.model import InconsistentTradeException
 from api.core.trade.service import TradeService
@@ -47,14 +46,11 @@ class TradesController:
             raise falcon.HTTPBadRequest()
 
     def _create_trade(self, request_context, trade_request: TradeRequest) -> Trade:
-        sell_currency = Currency(trade_request.sell_currency)
-        buy_currency = Currency(trade_request.buy_currency)
-
         service = TradeService(request_context.session)
         try:
-            return service.create_trade(sell_currency,
+            return service.create_trade(trade_request.sell_currency,
                                         trade_request.sell_amount,
-                                        buy_currency,
+                                        trade_request.buy_currency,
                                         trade_request.buy_amount,
                                         trade_request.rate)
 
