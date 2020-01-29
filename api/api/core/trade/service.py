@@ -1,16 +1,19 @@
+from typing import Any
 from typing import List
 
+from api.binding.repository import TradeRepositoryBinding
 from api.core.currency.model import Currency
 from api.core.trade.model import Trade
-from api.core.trade.repository import TradeRepository
 
 
 class TradeService:
     """Application Service that deals with foreign currency trades
+
+    It needs a database session object which is understood by the underlying repository.
     """
 
-    def __init__(self, repository: TradeRepository):
-        self._repository = repository
+    def __init__(self, session: Any):
+        self._repository = TradeRepositoryBinding.get(session)
 
     def create_trade(self, sell_currency: Currency, sell_amount: int,
                      buy_currency: Currency, buy_amount: int, rate: float) -> Trade:

@@ -4,7 +4,6 @@ import falcon
 
 from api.adapter.common.deserializer import Deserializer
 from api.adapter.common.serializer import Serializer
-from api.adapter.trade.repository import SqlAlchemyTradeRepository
 from api.adapter.trade.resource import TradeRequest
 from api.adapter.trade.resource import TradeResponse
 from api.core.currency.model import Currency
@@ -52,8 +51,7 @@ class TradesController:
         sell_currency = Currency(trade_request.sell_currency)
         buy_currency = Currency(trade_request.buy_currency)
 
-        repository = SqlAlchemyTradeRepository(request_context.session)
-        service = TradeService(repository)
+        service = TradeService(request_context.session)
         try:
             return service.create_trade(sell_currency, trade_request.sell_amount,
                                         buy_currency, trade_request.buy_amount,
@@ -63,6 +61,5 @@ class TradesController:
             raise falcon.HTTPBadRequest()
 
     def _get_trades(self, request_context) -> List[Trade]:
-        repository = SqlAlchemyTradeRepository(request_context.session)
-        service = TradeService(repository)
+        service = TradeService(request_context.session)
         return service.get_trades()
