@@ -1,0 +1,322 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Ebury Trades API",
+    "version": "1.0.0",
+    "title": "Ebury Trades API"
+  },
+  "tags": [
+    {
+      "name": "currencies",
+      "description": "Currency endpoints"
+    },
+    {
+      "name": "rates",
+      "description": "Rate exchange endpoints"
+    },
+    {
+      "name": "trades",
+      "description": "Trade endpoints"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/v1/currencies": {
+      "get": {
+        "tags": [
+          "currencies"
+        ],
+        "summary": "Return the list of available currencies",
+        "description": "Return the list of available currencies",
+        "operationId": "listCurrencies",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/CurrencyResponse"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rates": {
+      "get": {
+        "tags": [
+          "rates"
+        ],
+        "summary": "Return the list of exchange rates for a given currency",
+        "description": "Return the list of exchange rates for a given currency",
+        "operationId": "listRates",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "description": "Currency symbol",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/RateResponse"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "502": {
+            "description": "Bad gateway",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "504": {
+            "description": "Gateway timeout",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/trades": {
+      "get": {
+        "tags": [
+          "trades"
+        ],
+        "summary": "Return the list of trades already booked",
+        "description": "Return the list of trades already booked",
+        "operationId": "listTrades",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TradeResponse"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "trades"
+        ],
+        "summary": "Create a new trade",
+        "description": "Create a new trade",
+        "operationId": "createTrade",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "trade",
+            "in": "body",
+            "description": "Trade to create",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TradeRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "headers": {
+              "location": {
+                "description": "URI of the new trade",
+                "type": "string"
+              }
+            },
+            "schema": {
+              "$ref": "#/definitions/TradeResponse"
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "CurrencyResponse": {
+      "type": "object",
+      "required": [
+        "symbol"
+      ],
+      "properties": {
+        "symbol": {
+          "description": "Currency symbol (e.g. \"EUR\" or \"USD\")",
+          "type": "string"
+        }
+      }
+    },
+    "RateResponse": {
+      "type": "object",
+      "required": [
+        "sell_currency",
+        "buy_currency",
+        "rate"
+      ],
+      "properties": {
+        "sell_currency": {
+          "description": "Symbol of currency that would be sold (e.g. \"EUR\" or \"USD\")",
+          "type": "string"
+        },
+        "buy_currency": {
+          "description": "Symbol of currency that would be bought (e.g. \"EUR\" or \"USD\")",
+          "type": "string"
+        },
+        "rate": {
+          "description": "Exchange rate",
+          "type": "number"
+        }
+      }
+    },
+    "TradeRequest": {
+      "type": "object",
+      "required": [
+        "sell_currency",
+        "sell_amount",
+        "buy_currency",
+        "buy_amount",
+        "rate"
+      ],
+      "properties": {
+        "sell_currency": {
+          "description": "Symbol of currency sold (e.g. \"EUR\" or \"USD\")",
+          "type": "string"
+        },
+        "sell_amount": {
+          "description": "Amount sold (in cents)",
+          "type": "integer"
+        },
+        "buy_currency": {
+          "description": "Symbol of currency bought (e.g. \"EUR\" or \"USD\")",
+          "type": "string"
+        },
+        "buy_amount": {
+          "description": "Amount bought (in cents)",
+          "type": "integer"
+        },
+        "rate": {
+          "description": "Exchange rate",
+          "type": "number"
+        }
+      }
+    },
+    "TradeResponse": {
+      "type": "object",
+      "required": [
+        "id",
+        "sell_currency",
+        "sell_amount",
+        "buy_currency",
+        "buy_amount",
+        "rate",
+        "created_at"
+      ],
+      "properties": {
+        "id": {
+          "description": "Trade id",
+          "type": "string"
+        },
+        "sell_currency": {
+          "description": "Symbol of currency sold (e.g. \"EUR\" or \"USD\")",
+          "type": "string"
+        },
+        "sell_amount": {
+          "description": "Amount sold (in cents)",
+          "type": "integer"
+        },
+        "buy_currency": {
+          "description": "Symbol of currency bought (e.g. \"EUR\" or \"USD\")",
+          "type": "string"
+        },
+        "buy_amount": {
+          "description": "Amount bought (in cents)",
+          "type": "integer"
+        },
+        "rate": {
+          "description": "Exchange rate",
+          "type": "number"
+        },
+        "created_at": {
+          "description": "Trade datetime in UTC",
+          "type": "string"
+        }
+      }
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "required": [
+        "errors"
+      ],
+      "properties": {
+        "errors": {
+          "description": "Errors",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Error"
+          }
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "required": [
+        "loc",
+        "msg",
+        "type"
+      ],
+      "properties": {
+        "loc": {
+          "description": "Points to the source of the error (e.g. fields, query params, etc)",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "msg": {
+          "description": "Error description in natural language",
+          "type": "string"
+        },
+        "type": {
+          "description": "Error type",
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Repo at GitHub",
+    "url": "https://github.com/fjros/ebury"
+  }
+}
