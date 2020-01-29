@@ -211,4 +211,8 @@ button {
   margin-top: 10px;
   margin-right: 10px;
 }
+
+form {
+  max-width: 55%;
+}
 </style>
