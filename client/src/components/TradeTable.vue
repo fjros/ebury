@@ -45,10 +45,15 @@ export default {
       try {
         const response = await fetch("/api/v1/trades");
         const data = await response.json();
-        this.trades = data;
+
+        if (response.ok) {
+          this.trades = data;
+        } else {
+          this.toast(data.errors[0].msg);
+        }
       } catch (error) {
-        // TODO: provide user with feedback
         console.error(error);
+        this.toast();
       }
     }
   },
@@ -61,6 +66,17 @@ export default {
 
   mounted() {
     this.getTrades();
+  },
+
+  toast(message = "Something wrong happened") {
+    this.$toasted.show(message, {
+      action: {
+        text: "Close",
+        onClick: (e, toastObject) => {
+          toastObject.goAway(0);
+        }
+      }
+    });
   },
 
   computed: {

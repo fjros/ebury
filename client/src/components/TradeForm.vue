@@ -48,7 +48,7 @@ export default {
         this.trade.buy_amount <= 0 ||
         this.trade.rate <= 0
       ) {
-        // TODO: provide user with feedback
+        this.toast("Missing fields or incorrect values");
         return;
       }
 
@@ -68,13 +68,12 @@ export default {
         if (response.ok) {
           this.currencies = data;
           this.$router.push({ path: "/" });
-        }
-        else {
-          // TODO: provide user with feedback
+        } else {
+          this.toast(data.errors[0].msg);
         }
       } catch (error) {
-        // TODO: provide user with feedback
         console.error(error);
+        this.toast();
       }
     },
 
@@ -86,11 +85,11 @@ export default {
         if (response.ok) {
           this.currencies = data;
         } else {
-          // TODO: provide user with feedback
+          this.toast(data.errors[0].msg);
         }
       } catch (error) {
-        // TODO: provide user with feedback
         console.error(error);
+        this.toast();
       }
     },
 
@@ -113,11 +112,19 @@ export default {
           this.setRate();
           this.setBuyAmount();
         } else {
-          // TODO: provide user with feedback
+          let msg = data.errors[0].msg
+          if (response.status == 502) {
+            msg =
+              "Error response from Fixer. Does your plan include support for querying the rates of " +
+              this.trade.sell_currency +
+              "?";
+          }
+          this.toast(msg);
           this.cleanUp();
         }
       } catch (error) {
         console.error(error);
+        this.toast();
       }
     },
 
@@ -164,6 +171,17 @@ export default {
       this.rates = [];
       this.trade.rate = 0.0;
       this.trade.buy_amount = 0.0;
+    },
+
+    toast(message = "Something wrong happened") {
+      this.$toasted.show(message, {
+        action: {
+          text: "Close",
+          onClick: (e, toastObject) => {
+            toastObject.goAway(0);
+          }
+        }
+      });
     }
   },
 
